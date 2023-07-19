@@ -16,19 +16,21 @@ class ShoppingItemRepositoryImpl(
     }
 
     override fun updateItem(itemToUpdate: ShoppingItem) {
-        val item = database.find {
-            it.id == itemToUpdate.id
-        }
-        if (item != null) {
-            database.remove(item)
-            if(itemToUpdate.amount > 0) {
-                database.add(itemToUpdate)
+        val itemIndex = database.indexOfFirst { it.id == itemToUpdate.id }
+        if (itemIndex != -1) {
+            if (itemToUpdate.amount > 0) {
+                database[itemIndex] = itemToUpdate
+            } else {
+                removeItem(itemToUpdate)
             }
         }
     }
 
     override fun removeItem(itemToRemove: ShoppingItem) {
-        database.remove(itemToRemove)
+        val itemIndex = database.indexOfFirst { it.id == itemToRemove.id }
+        if (itemIndex != -1) {
+            database.removeAt(itemIndex)
+        }
     }
 
     override fun clearShoppingList() {
