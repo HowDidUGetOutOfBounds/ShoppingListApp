@@ -8,7 +8,7 @@ object Utils {
     val dataSet = arrayListOf(
         ShoppingItem(
             id = 0,
-            image = R.drawable.no_image_placeholder,
+            image = null,
             title = "My title 1",
             description = "My Content 1",
             amount = 0
@@ -22,7 +22,7 @@ object Utils {
         ),
         ShoppingItem(
             id = 2,
-            image = R.drawable.no_image_placeholder,
+            image = null,
             title = "My title 3",
             description = "My Content 3",
             amount = 0

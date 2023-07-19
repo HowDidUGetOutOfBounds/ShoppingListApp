@@ -20,11 +20,12 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/addItemButton"
         app:layout_constraintTop_toBottomOf="@id/mainScreenToolbar"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:listitem="@layout/image_list_item_shopping_list"
-        tools:itemCount="6"
-        android:layout_height="0dp" />
+        tools:itemCount="4"
+        tools:listitem="@layout/image_list_item_shopping_list" />
 
     <com.google.android.material.button.MaterialButton
         style="@style/Widget.MaterialComponents.Button.MyButtonStyle"

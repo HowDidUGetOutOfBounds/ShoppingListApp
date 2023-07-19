@@ -21,7 +21,9 @@ class ShoppingItemRepositoryImpl(
         }
         if (item != null) {
             database.remove(item)
-            database.add(itemToUpdate)
+            if(itemToUpdate.amount > 0) {
+                database.add(itemToUpdate)
+            }
         }
     }
 
