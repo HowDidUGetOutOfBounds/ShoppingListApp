@@ -21,6 +21,8 @@ import com.example.myapplication.data.ShoppingItem
 import com.example.myapplication.databinding.FragmentAddItemBinding
 import com.example.myapplication.domain.ShoppingListViewModel
 import com.example.myapplication.domain.ShoppingListViewModelFactory
+import com.example.myapplication.model.ShoppingItemRepository
+import javax.inject.Inject
 
 
 private const val GALLERY_REQUEST = 202
@@ -29,14 +31,22 @@ class AddItemFragment : Fragment() {
 
     private var _binding: FragmentAddItemBinding? = null
     private val binding get() = _binding!!
+
+    @Inject
+    lateinit var shoppingItemRepo: ShoppingItemRepository
+
     private val viewModel: ShoppingListViewModel by activityViewModels {
         ShoppingListViewModelFactory(
-            (requireActivity().application as MyApp).shoppingItemRepository
+            shoppingItemRepo
         )
     }
 
     lateinit var imagePickerActivityResult: ActivityResultLauncher<Intent>
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        (requireActivity().application as MyApp).databaseComponent.inject(this)
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

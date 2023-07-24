@@ -17,20 +17,30 @@ import com.example.myapplication.data.ShoppingItem
 import com.example.myapplication.databinding.MainScreenFragmentBinding
 import com.example.myapplication.domain.ShoppingListViewModel
 import com.example.myapplication.domain.ShoppingListViewModelFactory
+import com.example.myapplication.model.ShoppingItemRepository
 import com.example.myapplication.utils.Utils
+import javax.inject.Inject
 
 class MainScreenFragment : Fragment() {
 
     private var _binding: MainScreenFragmentBinding? = null
     private val binding get() = _binding!!
 
+    @Inject
+    lateinit var shoppingItemRepo: ShoppingItemRepository
+
     private val viewModel: ShoppingListViewModel by activityViewModels {
         ShoppingListViewModelFactory(
-            (requireActivity().application as MyApp).shoppingItemRepository
+            shoppingItemRepo
         )
     }
 
     var mainRecyclerViewAdapter: ItemsListAdapter? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        (requireActivity().application as MyApp).databaseComponent.inject(this)
+        super.onCreate(savedInstanceState)
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
