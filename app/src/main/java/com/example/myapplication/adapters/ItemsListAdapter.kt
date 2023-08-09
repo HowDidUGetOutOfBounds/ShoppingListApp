@@ -3,6 +3,9 @@ package com.example.myapplication.adapters
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.net.toUri
+import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.myapplication.data.ShoppingItem
@@ -12,9 +15,9 @@ import com.example.myapplication.utils.getViewType
 
 class ItemsListAdapter(
     val context: Context,
-    var list: List<ShoppingItem>,
     val increaseItemAmountInStorage: (ShoppingItem) -> Unit,
     val decreaseItemAmountInStorage: (ShoppingItem) -> Unit,
+    val canButtonClick: (ShoppingItem) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     inner class ImageItemViewHolder(val binding: ImageShoppingListItemBinding) :
@@ -39,9 +42,12 @@ class ItemsListAdapter(
                         )
                     )
                 }
+                deleteAllImageView.setOnClickListener {
+                    canButtonClick(shoppingItem)
+                }
                 shoppingItem.image?.let { imageUri ->
                     Glide.with(context)
-                        .load(imageUri)
+                        .load(imageUri.toUri())
                         .into(goodImageView)
                 }
             }
@@ -70,6 +76,9 @@ class ItemsListAdapter(
                         )
                     )
                 }
+                deleteAllImageView.setOnClickListener {
+                    canButtonClick(shoppingItem)
+                }
             }
         }
     }
@@ -93,25 +102,32 @@ class ItemsListAdapter(
     }
 
     override fun getItemCount(): Int {
-        return list.size
+        return differ.currentList.size
     }
 
     override fun getItemViewType(position: Int): Int {
-        return list[position].getViewType()
+        return differ.currentList[position].getViewType()
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (list[position].getViewType() == VIEW_TYPE_IMAGE_ITEM) {
-            (holder as ImageItemViewHolder).bind(list[position])
+        if (differ.currentList[position].getViewType() == VIEW_TYPE_IMAGE_ITEM) {
+            (holder as ImageItemViewHolder).bind(differ.currentList[position])
         } else {
-            (holder as TextItemViewHolder).bind(list[position])
+            (holder as TextItemViewHolder).bind(differ.currentList[position])
         }
     }
 
-    fun setNewDataset(list: List<ShoppingItem>) {
-        this.list = list
-        notifyDataSetChanged()
+    private val differCallback = object : DiffUtil.ItemCallback<ShoppingItem>(){
+        override fun areItemsTheSame(oldItem: ShoppingItem, newItem: ShoppingItem): Boolean {
+            return  oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: ShoppingItem, newItem: ShoppingItem): Boolean {
+            return oldItem == newItem
+        }
     }
+
+    val differ = AsyncListDiffer(this,differCallback)
 
     companion object {
         const val VIEW_TYPE_IMAGE_ITEM = 1

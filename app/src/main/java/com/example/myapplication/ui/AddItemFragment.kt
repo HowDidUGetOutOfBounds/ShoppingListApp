@@ -22,6 +22,7 @@ import com.example.myapplication.databinding.FragmentAddItemBinding
 import com.example.myapplication.domain.ShoppingListViewModel
 import com.example.myapplication.domain.ShoppingListViewModelFactory
 import com.example.myapplication.model.ShoppingItemRepository
+import com.example.myapplication.model.ShoppingPreferences
 import javax.inject.Inject
 
 
@@ -35,9 +36,13 @@ class AddItemFragment : Fragment() {
     @Inject
     lateinit var shoppingItemRepo: ShoppingItemRepository
 
+    @Inject
+    lateinit var prefs: ShoppingPreferences
+
     private val viewModel: ShoppingListViewModel by activityViewModels {
         ShoppingListViewModelFactory(
-            shoppingItemRepo
+            shoppingItemRepo,
+            prefs
         )
     }
 
@@ -69,7 +74,6 @@ class AddItemFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d("TAG", "onViewCreated: ${viewModel.toString()}")
         setUpViews()
     }
 
@@ -126,7 +130,7 @@ class AddItemFragment : Fragment() {
                     title = titleEditText.text.toString(),
                     description = descriptionEditText.text.toString(),
                     amount = amount,
-                    image = viewModel.lastImageUriData.value ?: null,
+                    image = viewModel.lastImageUriData.value?.toString(),
                 )
             }
         }

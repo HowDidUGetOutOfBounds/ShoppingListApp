@@ -1,12 +1,13 @@
 package com.example.myapplication.model
 
 import com.example.myapplication.data.ShoppingItem
+import kotlinx.coroutines.flow.Flow
 
 interface ShoppingItemRepository {
 
     fun addItem(itemToAdd: ShoppingItem)
 
-    fun getItemByTitle(title: String): ShoppingItem?
+    suspend fun getItemByTitle(title: String): ShoppingItem?
 
     fun updateItem(itemToUpdate: ShoppingItem)
 
@@ -14,5 +15,5 @@ interface ShoppingItemRepository {
 
     fun clearShoppingList()
 
-    fun getAll(): List<ShoppingItem>
+    fun getAll(): Flow<List<ShoppingItem>>
 }

@@ -29,9 +29,18 @@
             android:text="Item"
             android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/deleteAllImageView"
             app:layout_constraintStart_toEndOf="@+id/goodImageView"
             app:layout_constraintTop_toTopOf="@+id/goodImageView" />
+
+        <ImageView
+            android:id="@+id/deleteAllImageView"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:src="@drawable/baseline_delete_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/contentTextView"

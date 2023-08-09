@@ -18,6 +18,7 @@ import com.example.myapplication.databinding.MainScreenFragmentBinding
 import com.example.myapplication.domain.ShoppingListViewModel
 import com.example.myapplication.domain.ShoppingListViewModelFactory
 import com.example.myapplication.model.ShoppingItemRepository
+import com.example.myapplication.model.ShoppingPreferences
 import com.example.myapplication.utils.Utils
 import javax.inject.Inject
 
@@ -29,9 +30,13 @@ class MainScreenFragment : Fragment() {
     @Inject
     lateinit var shoppingItemRepo: ShoppingItemRepository
 
+    @Inject
+    lateinit var prefs: ShoppingPreferences
+
     private val viewModel: ShoppingListViewModel by activityViewModels {
         ShoppingListViewModelFactory(
-            shoppingItemRepo
+            shoppingItemRepo,
+            prefs
         )
     }
 
@@ -41,6 +46,7 @@ class MainScreenFragment : Fragment() {
         (requireActivity().application as MyApp).databaseComponent.inject(this)
         super.onCreate(savedInstanceState)
     }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -52,24 +58,30 @@ class MainScreenFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d("TAG", "onViewCreated: ${viewModel.toString()}")
+
         setupViews()
+        setupObservers()
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    private fun setupObservers() {
+        viewModel.getAll()
+
+        viewModel.databaseData.observe(this) { newData ->
+            mainRecyclerViewAdapter?.differ?.submitList(newData)
+        }
     }
 
     private fun setupViews() {
         mainRecyclerViewAdapter = ItemsListAdapter(
             context = requireContext(),
-            list = viewModel.getAll(),
             increaseItemAmountInStorage = { item ->
                 viewModel.updateItem(item)
             },
             decreaseItemAmountInStorage = { item ->
                 viewModel.updateItem(item)
+            },
+            canButtonClick = { item ->
+                viewModel.deleteItem(item)
             }
         )
 
@@ -79,9 +91,10 @@ class MainScreenFragment : Fragment() {
         binding.addItemButton.setOnClickListener {
             findNavController().navigate(R.id.action_mainScreenFragment_to_addItemFragment)
         }
+    }
 
-        viewModel.databaseData.observe(viewLifecycleOwner){ dataSet ->
-            mainRecyclerViewAdapter?.setNewDataset(dataSet)
-        }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
