@@ -14,4 +14,4 @@ data class ShoppingItem(
     @ColumnInfo("image") val image: String?,
     @ColumnInfo("description") val description: String,
     @ColumnInfo("amount") val amount: Int,
-)
+): java.io.Serializable

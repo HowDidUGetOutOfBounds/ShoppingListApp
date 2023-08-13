@@ -18,5 +18,6 @@
         android:id="@+id/addItemFragment"
         android:name="com.example.myapplication.ui.AddItemFragment"
         android:label="fragment_add_item"
-        tools:layout="@layout/fragment_add_item" />
+        tools:layout="@layout/fragment_add_item">
+    </fragment>
 </navigation>

@@ -17,6 +17,7 @@ class RealDatabaseShoppingItemRepository(
 
     override suspend fun getItemByTitle(title: String) = shoppingItemDao.getByTitle(title)
 
+    override suspend fun getItemById(id: Long) = shoppingItemDao.getById(id)
 
     override fun updateItem(itemToUpdate: ShoppingItem) {
         databaseCoroutineScope.launch {

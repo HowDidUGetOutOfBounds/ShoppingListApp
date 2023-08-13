@@ -9,6 +9,8 @@ interface ShoppingItemRepository {
 
     suspend fun getItemByTitle(title: String): ShoppingItem?
 
+    suspend fun getItemById(id: Long): ShoppingItem?
+
     fun updateItem(itemToUpdate: ShoppingItem)
 
     fun removeItem(itemToRemove: ShoppingItem)

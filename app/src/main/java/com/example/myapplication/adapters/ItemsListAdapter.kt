@@ -17,10 +17,11 @@ class ItemsListAdapter(
     val context: Context,
     val increaseItemAmountInStorage: (ShoppingItem) -> Unit,
     val decreaseItemAmountInStorage: (ShoppingItem) -> Unit,
-    val canButtonClick: (ShoppingItem) -> Unit
+    val canButtonClick: (ShoppingItem) -> Unit,
+    val onUpdateItemClick: (ShoppingItem) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    inner class ImageItemViewHolder(val binding: ImageShoppingListItemBinding) :
+    inner class ImageItemViewHolder(private val binding: ImageShoppingListItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(shoppingItem: ShoppingItem) {
             with(binding)
@@ -50,6 +51,9 @@ class ItemsListAdapter(
                         .load(imageUri.toUri())
                         .into(goodImageView)
                 }
+                root.setOnClickListener {
+                    onUpdateItemClick(shoppingItem)
+                }
             }
         }
     }
@@ -78,6 +82,9 @@ class ItemsListAdapter(
                 }
                 deleteAllImageView.setOnClickListener {
                     canButtonClick(shoppingItem)
+                }
+                root.setOnClickListener {
+                    onUpdateItemClick(shoppingItem)
                 }
             }
         }

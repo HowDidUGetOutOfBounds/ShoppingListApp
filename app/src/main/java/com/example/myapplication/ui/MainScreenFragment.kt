@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -82,6 +83,10 @@ class MainScreenFragment : Fragment() {
             },
             canButtonClick = { item ->
                 viewModel.deleteItem(item)
+            },
+            onUpdateItemClick = { shoppingItem ->
+                viewModel.setActiveId(shoppingItem.id)
+                findNavController().navigate(R.id.action_mainScreenFragment_to_addItemFragment)
             }
         )
 
